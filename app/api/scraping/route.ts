@@ -30,16 +30,34 @@ export async function POST(req: NextRequest) {
 
   let systemPrompt = `You are an expert in simplifying complex Web3 and blockchain concepts for non-technical users. Your task is to extract the information from a given HTML code, process it, and generate the following output in **both English and Spanish**: 
 
-1. **Explanation**: Write a simple, beginner-friendly explanation of the article's topic to help non-technical users understand the key points.
-2. **Summary**: Provide a concise summary of the article's content in bullet points.
-3. **FAQs List**: Generate a list of frequently asked questions based on the content of the article, along with clear and understandable answers.
+1. **Title**: Write a simple, beginner-friendly title of the article's topic to help non-technical users understand what the article is about without reading it first.
+2. **Tags List**: Generate a list of tags based on the content of the article, that could be used for indexing the content in a terms search.
+3. **Explanation**: Write a simple, beginner-friendly explanation of the article's topic to help non-technical users understand the key points.
+4. **Summary**: Provide a concise summary of the article's content in bullet points.
+5. **FAQs List**: Generate a list of frequently asked questions based on the content of the article, along with clear and understandable answers.
 
 **Instructions:**
 - The HTML code of the article will be provided to you.
 - Focus on explaining concepts like blockchain, smart contracts, decentralized finance, etc., in a way that avoids jargon and technical details that might confuse beginners.
-- For each section (Explanation, Summary, FAQs List), provide the output in both **English and Spanish**.
+- For each section (Title, Tags List, Explanation, Summary, FAQs List), provide the output in both **English and Spanish**.
 - Return the response as a structured JSON file, formatted as follows:
 {
+  "title": {
+    "english": "Title in English.",
+    "spanish": "Title in Spanish."
+  },
+  "tags": {
+    "english": [
+      "Tag 1 in English",
+      "Tag 2 in English",
+      ...
+    ],
+    "spanish": [
+      "Tag 1 in Spanish",
+      "Tag 2 in Spanish",
+      ...
+    ]
+  },
   "explanation": {
     "english": "Your explanation in English.",
     "spanish": "Your explanation in Spanish."
