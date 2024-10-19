@@ -44,6 +44,9 @@ export default function Chat() {
   const [faqs, setFaqs] = useState<Faq[]>([]);
   const [summaries, setSummaries] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
+  const [faqsString, setFaqsString] = useState("");
+  const [summariesString, setSummariesString] = useState("");
+  const [tagsString, setTagsString] = useState("");
 
   const [titleEN, setTitleEN] = useState("");
   const [explanationEN, setExplanationEN] = useState("");
@@ -55,15 +58,6 @@ export default function Chat() {
     { value: "spanish", name: "Español" },
     { value: "english", name: "English" },
   ];
-
-  const contracts = [
-    {
-      address: micropaymentsContractAddress,
-      abi: micropaymentsContractAbi,
-      functionName: 'saveExplanation',
-      args: [address],
-    },
-  ] as unknown as ContractFunctionParameters[];
 
   const handleError = (err: TransactionError) => {
     console.error('Transaction error:', err);
@@ -100,8 +94,10 @@ export default function Chat() {
     setTitleEN(cleanedJsonObj.title.english);
     setExplanationEN(cleanedJsonObj.explanation.english);
 
+    let tagsTemp = "";
     cleanedJsonObj.tags.spanish.map(function (item: string) {
-      tags.push(item)
+      tags.push(item);
+      tagsTemp += item + ",";
     });
     setTags(tags);
     cleanedJsonObj.tags.english.map(function (item: string) {
@@ -109,6 +105,7 @@ export default function Chat() {
     });
     setTagsEN(tagsEN);
 
+    let summariesTemp = "";
     cleanedJsonObj.summary.spanish.map(function (item: string) {
       summaries.push(item)
     });
@@ -149,6 +146,23 @@ export default function Chat() {
       value: BigInt(70000000000000) // close to $0.20
     },
   ];
+  const contracts = [
+    {
+      address: micropaymentsContractAddress,
+      abi: micropaymentsContractAbi,
+      functionName: 'saveArticle',
+      args: [0,article,title,explanation, tagsString,summariesString,faqsString],
+    },
+  ] as unknown as ContractFunctionParameters[];
+
+  const contractsEN = [
+    {
+      address: micropaymentsContractAddress,
+      abi: micropaymentsContractAbi,
+      functionName: 'saveArticle',
+      args: [address],
+    },
+  ] as unknown as ContractFunctionParameters[];
 
   interface Faq {
     question: string,
@@ -223,64 +237,6 @@ export default function Chat() {
               </div>
             )}
             <form className="flex flex-row justify-center gap-2 md:gap-4">
-              {!post && (
-                <button
-                  className="hidden inline-flex text-center justify-center items-center w-full md:w-auto order-1 m-2 font-bold hover:bg-green-500 text-green-500 hover:text-white border border-green-500 py-2 px-4 rounded disabled:opacity-50"
-                  onClick={async () => {
-                    setIsLoading(true);
-                    const responseScraping = await fetch(article.trim());
-                    const dataScraping = await responseScraping.text();
-                    const response = await fetch("api/scraping", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                      body: JSON.stringify({
-                        userPrompt: dataScraping,
-                      }),
-                    });
-                    const data = await response.json();
-                    console.log("jsonResponse:", data);
-                    const cleanedJsonString = data.text.replace(/^```json\s*|```\s*$/g, "");
-                    const cleanedJsonObj = JSON.parse(cleanedJsonString);
-
-                    setTitle(cleanedJsonObj.title.spanish);
-                    setExplanation(cleanedJsonObj.explanation.spanish);
-
-                    cleanedJsonObj.tags.spanish.map(function (item: string) {
-                      tags.push(item)
-                    });
-                    setTags(tags);
-
-                    cleanedJsonObj.summary.spanish.map(function (item: string) {
-                      summaries.push(item)
-                    });
-                    setSummaries(summaries);
-
-                    cleanedJsonObj.faqs.spanish.map(function (item: { question: string; answer: string; }) {
-                      faqs.push({
-                        question: item.question,
-                        answer: item.answer
-                      })
-                    });
-                    setFaqs(faqs);
-
-                    const responseFull = cleanedJsonObj.explanation.spanish;
-                    setPost(responseFull);
-                    setIsLoading(false);
-                  }}
-                >
-                  <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round">
-                    <path stroke="currentColor" d="M16.872 9.687 20 6.56 17.44 4 4 17.44 6.56 20 16.873 9.687Zm0 0-2.56-2.56M6 7v2m0 0v2m0-2H4m2 0h2m7 7v2m0 0v2m0-2h-2m2 0h2M8 4h.01v.01H8V4Zm2 2h.01v.01H10V6Zm2-2h.01v.01H12V4Zm8 8h.01v.01H20V12Zm-2 2h.01v.01H18V14Zm2 2h.01v.01H20V16Z" />
-                  </svg>
-                  <span>Explain Now</span>
-                </button>
-              )}
               {address ? article && !post &&
                 <div className="flex">
                   <Transaction
@@ -312,6 +268,23 @@ export default function Chat() {
                 )}
               {post &&
                 <>
+                  <Transaction
+                    capabilities={{
+                      paymasterService: {
+                        url: process.env.NEXT_PUBLIC_PAYMASTER_AND_BUNDLER_ENDPOINT!,
+                      },
+                    }}
+                    contracts={contracts}
+                    chainId={BASE_SEPOLIA_CHAIN_ID}
+                    onError={handleError}
+                    onSuccess={handleSuccess}
+                  >
+                    <TransactionButton className="m-2 max-w-full hover:bg-green-800 bg-green-500 hover:text-white border border-green-500 py-2 px-4 rounded disabled:opacity-50" text="Save Explanation" />
+                    <TransactionStatus>
+                      <TransactionStatusLabel />
+                      <TransactionStatusAction />
+                    </TransactionStatus>
+                  </Transaction>
                   <ResetButton post={post} tweets={tweets} isLoading={isLoading} onButtonClicked={async () => {
                     window.location.reload();
                   }} />
