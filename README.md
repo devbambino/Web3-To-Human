@@ -1,16 +1,19 @@
 # Web3-To-Human v1
-🚀 Unveiling Web3 To Human: 
+Simplifying Web3 and blockchain for Spanish-speaking users in Latin America with AI-powered articles, explained in easy-to-understand language and stored on the blockchain for free access by all.
+
+With Web3 To Human, our goal is to bridge the knowledge gap around Web3 and blockchain for Spanish-speaking users, making complex technologies accessible in their native language. This project is not just about education—it’s about empowering Latin Americans with the tools and knowledge to actively participate in the growing Web3 space. I believe Web3 can open doors for financial inclusion, innovation, and economic empowerment in LATAM, and I want to be part of that transformation.
 
 ## Features
 Here's what it offers:
 
-- 🪄 **Feat1** Desc1. 
-<img src="res/feature1.png" width="612" height="300">
+- 🪄 **Web3 to easy to understand language translation** The app transforms technical Web3 content into simplified articles in Spanish and english using AI. 
 
-- ✂️ **Feat2** Desc2. 
-<img src="res/feature2.png" width="612" height="300">
+- **Gas less transactions** Using Coinbase's paymaster capabilities the app allows gas less transactions for Coinbase wallet users. 
 
-- 📲 **Feat3** Desc3. 
+- **Blockchain Storage** Articles are stored on the blockchain, making them accessible for free to future users. 
+<img src="res/feature3.png" width="612" height="300">
+
+- **Educational Features** Each article contains a title, tags, explanations, key points, and FAQs designed to break down complex topics, and help new users to break into the wonderful web3 world. 
 <img src="res/feature3.png" width="612" height="300">
 
 - 🧠 **Powered by Gemini Pro:** Leverages advanced AI capabilities for top-notch content quality.
@@ -27,8 +30,11 @@ Here's what it offers:
 `npm install`
 
 ### Create .env in root
-Include your Google Gemini API key there with the variable name: 
+Include your Google Gemini API key and all CDP related keys there with the variable name: 
 `GOOGLE_API_KEY="your_key_here"`
+`NEXT_PUBLIC_CDP_API_KEY="your_key_here"`
+`NEXT_PUBLIC_WC_PROJECT_ID="your_key_here"`
+`NEXT_PUBLIC_PAYMASTER_AND_BUNDLER_ENDPOINT="your_key_here"`
 
 ### Run the app
 `npm run dev`
@@ -39,7 +45,7 @@ The feature generating a post from an url is doing web scraping to extract the t
 
 ## Tech behind
 
-This app is using Google AI API for connecting to Gemini 1.5 Flash LLM.
+This app is connecting to Base Sepolia blockchain and is using Google AI API for connecting to Gemini 1.5 Flash LLM.
 
 ## Copyrights
 

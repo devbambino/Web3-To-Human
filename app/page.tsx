@@ -101,7 +101,9 @@ export default function Chat() {
   };
   const handleSaveSuccess = (response: TransactionResponse) => {
     //console.log('handleSuccess Transaction successful', response);
-    toast.success("Article saved successfully!!!");
+    if (response) {
+      //toast.success("Article saved successfully!!!");
+    }
   };
   function getRandomArticle() {
     if (randomArticle) {
@@ -219,21 +221,11 @@ export default function Chat() {
   return (
     <div className="w-full flex-col">
       <div className="flex flex-row items-center h-[50px] sticky top-0 bg-green-500">
-        <svg
-          className="shrink h-0 w-0 md:h-6 md:w-6 text-gray-800"
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M15.59 14.37a6 6 0 0 1-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 0 0 6.16-12.12A14.98 14.98 0 0 0 9.631 8.41m5.96 5.96a14.926 14.926 0 0 1-5.841 2.58m-.119-8.54a6 6 0 0 0-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 0 0-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 0 1-2.448-2.448 14.9 14.9 0 0 1 .06-.312m-2.24 2.39a4.493 4.493 0 0 0-1.757 4.306 4.493 4.493 0 0 0 4.306-1.758M16.5 9a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z" />
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="shrink h-0 w-0 md:h-6 md:w-6 text-gray-800" viewBox="0 0 16 16">
+          <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+          <path d="M2 13c0 1 1 1 1 1h5.256A4.5 4.5 0 0 1 8 12.5a4.5 4.5 0 0 1 1.544-3.393Q8.844 9.002 8 9c-5 0-6 3-6 4" />
         </svg>
-        <h1 className="grow ml-1 text-xl text-black font-bold tracking-tighter md:text-2xl">Web3-To-Human</h1>
+        <h1 className="grow ml-1 text-xl text-black font-bold tracking-tighter md:text-xl">{"Web3 > Human" }</h1>
         <div className="flex flex-none items-center gap-3">
           <SignupButton />
           {!address && <LoginButton />}
@@ -244,11 +236,11 @@ export default function Chat() {
           <div className="flex flex-col gap-2">
             {!explanation && (
               <div className="w-full">
-                <h2 className="w-full text-2xl text-green-500 font-bold">Hello, Human!!!</h2>
-
+                <h2 className="w-full text-2xl text-green-500 font-bold">Hello, Human*!!!</h2>
+                <p className="text-sm mb-4">*This app is human-friendly so feel free to use it at rest to translate any Web3 article to an easy to understand language...</p>
                 <div className="justify-center items-center my-1 space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
                   <h3 className="text-md leading-6 font-semibold">
-                    <span className="w-full text-xl text-green-500 font-bold">Step 1 /</span> Paste here the link of the Web3 article you want to translate into Human language...
+                    <span className="w-full text-xl text-green-500 font-bold">Step 1 /</span> Paste here the link of the Web3 article you want to translate into Human language:
                   </h3>
                   <input className="w-full min-h-[30px] border rounded text-black" name="article" disabled={isLoading || !address} id="text" placeholder="Enter the link here..." value={article} onChange={handleArticle} />
                 </div>
@@ -401,7 +393,7 @@ export default function Chat() {
                 ))}
             </span>
             <div>{state.language == "spanish" ? explanation : explanationEN}</div>
-            <h2 className="text-lg text-green-500 font-semibold tracking-tight">Summary</h2>
+            <h2 className="text-lg text-green-500 font-semibold tracking-tight">Keypoints</h2>
             <ul className="list-disc m-6">
               {state.language == "spanish" ?
                 summaries.map((summary, index) => (
