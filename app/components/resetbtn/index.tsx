@@ -8,7 +8,7 @@ interface ResetButtonProps {
   export default function ResetButton({ post, tweets, isLoading, onButtonClicked }: ResetButtonProps) {
     return (
         <button
-        className="inline-flex items-center w-full md:w-auto order-3 m-2 font-bold hover:bg-green-500 text-green-500 hover:text-white border border-green-500 py-2 px-4 rounded disabled:opacity-50"
+        className="inline-flex items-center w-full md:w-auto order-3 m-2 font-bold hover:bg-green-500 text-green-500 hover:text-white border border-green-500 px-4 py-2 rounded disabled:opacity-50"
         hidden={post.length == 0 || tweets.length == 0}
         disabled={isLoading}
         onClick={onButtonClicked}
