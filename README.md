@@ -8,7 +8,9 @@ Here's what it offers:
 
 - 🪄 **Web3 to easy to understand language translation** The app transforms technical Web3 content into simplified articles in Spanish and english using AI. 
 
-- **Gas less transactions** Using Coinbase's paymaster capabilities the app allows gas less transactions for Coinbase wallet users. 
+- **Gas Less Transactions** Using Coinbase's paymaster capabilities the app allows gas less transactions for Coinbase wallet users. 
+
+- **Charging for Using AI** In order to avoid bots to abuse the app we decided to charge 0.00007 ETH, equivalent to less than 20 cents. We are planning to reduce this amount in the future when the app goes to production and Mainnet. 
 
 - **Blockchain Storage** Articles are stored on the blockchain, making them accessible for free to future users. 
 
@@ -41,9 +43,11 @@ Include your Google Gemini API key and all CDP related keys there with the varia
 ### Run the app
 `npm run dev`
 
-## Troubleshooting
+## Troubleshooting & Know Issues
 
-The feature generating a post from an url is doing web scraping to extract the text from the web page shared. If you are running the app in Localhost then a Cross-Origin Resource Sharing (CORS) issue would occur. To fix the issue you would need to use the Firefox web browser and install the extension [CORS Everywhere](https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/).
+**App Reloading:** The first time you open the app, if you connect your wallet using the Coinbase wallet option then when you click "Get Random Explanation" button the apps get reloaded. This is a weird behaviour I didn't have time to fix. For avoiding this issue the first time you open the app simply connect your Coinbase wallet and then follow the "Pay & Get Explanation" flow which is: paste an url in the link field and then click "Pay $0.20 & Get Explanation". After getting the explanation, click "Reset" and from now on the "Get Random Explanation" button will be working properly.
+
+**Web Scraping in Localhost:** The feature generating an explanation from an url is doing web scraping to extract the text from the web page shared. If you are running the app in Localhost then a Cross-Origin Resource Sharing (CORS) issue would occur. To fix the issue you would need to use the Firefox web browser and install the extension [CORS Everywhere](https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/).
 
 ## Tech behind
 

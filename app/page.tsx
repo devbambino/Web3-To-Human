@@ -93,7 +93,7 @@ export default function Chat() {
 
   const handleError = (err: TransactionError) => {
     //console.error('Transaction error:', err);
-    toast.success("Transaction error: " + err);
+    toast.success("Transaction error: " + err.message);
   };
   const handlePaymentSuccess = (response: TransactionResponse) => {
     //console.log('handlePaymentSuccess Transaction successful', response);
@@ -263,8 +263,8 @@ export default function Chat() {
                 >
                   <TransactionButton className="m-auto w-auto hover:bg-green-800 bg-green-500 hover:text-white border border-green-500 py-2 px-4 rounded disabled:opacity-50" text="Pay $0.20 & Get Explanation" />
                   <TransactionStatus>
-                    <TransactionStatusLabel />
-                    <TransactionStatusAction />
+                    <TransactionStatusLabel/>
+                    <TransactionStatusAction/>
                   </TransactionStatus>
                 </Transaction>
               ) : (
