@@ -7,9 +7,7 @@ import dynamic from 'next/dynamic';
 import '@coinbase/onchainkit/styles.css';
 import '@rainbow-me/rainbowkit/styles.css';
 
-import { base, baseSepolia } from 'viem/chains';
-import { OnchainKitProvider } from '@coinbase/onchainkit';
-import { RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { Analytics } from '@vercel/analytics/react';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -43,6 +41,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Toaster position="bottom-center" />
         <OnchainProviders>{children}</OnchainProviders>
+        <Analytics />
       </body>
     </html>
   );
