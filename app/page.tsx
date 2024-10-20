@@ -252,7 +252,7 @@ export default function Chat() {
                 <Transaction
                   capabilities={{
                     paymasterService: {
-                      url: process.env.NEXT_PUBLIC_PAYMASTER_AND_BUNDLER_ENDPOINT!,
+                      url: process.env.PAYMASTER_AND_BUNDLER_ENDPOINT!,
                     },
                   }}
                   calls={calls}
@@ -300,7 +300,7 @@ export default function Chat() {
                     <Transaction
                       capabilities={{
                         paymasterService: {
-                          url: process.env.NEXT_PUBLIC_PAYMASTER_AND_BUNDLER_ENDPOINT!,
+                          url: process.env.PAYMASTER_AND_BUNDLER_ENDPOINT!,
                         },
                       }}
                       contracts={contractsSaveArticle}
