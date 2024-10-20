@@ -6,7 +6,7 @@ export async function POST(req: NextRequest) {
 
   const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY as string);
 
-  const generationConfig = { temperature: 0.8, maxOutputTokens: 2500 };
+  const generationConfig = { temperature: 0.8, maxOutputTokens: 3000 };
   const safetySettings = [
     {
       category: HarmCategory.HARM_CATEGORY_HARASSMENT,

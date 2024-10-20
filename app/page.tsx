@@ -1,15 +1,9 @@
 "use client";
 import { useState, ChangeEvent, SVGProps, JSX } from "react";
 import toast from "react-hot-toast";
-import ClipboardPasteIcon from "./components/clipboardicon";
-import LinkIcon from "./components/linkicon";
 import Loading from "./components/loading";
-import ResetButton from "./components/resetbtn";
 import { useAccount, useReadContract } from 'wagmi';
-import { ConnectWallet, Wallet, WalletDropdown, WalletDropdownBasename, WalletDropdownDisconnect, WalletDropdownLink } from "@coinbase/onchainkit/wallet";
-//import { Address, Avatar, Badge, EthBalance, Identity, Name } from "@coinbase/onchainkit/identity";
 import WalletWrapper from "./components/WalletWrapper";
-import TransactionWrapper from "./components/TransactionWrapper";
 import SignupButton from "./components/SignupButton";
 import LoginButton from "./components/LoginButton";
 import {
@@ -27,57 +21,11 @@ import { BASE_SEPOLIA_CHAIN_ID, web3humanContractAbi, web3humanContractAddress }
 import { ContractFunctionParameters, encodeFunctionData } from 'viem';
 
 export default function Chat() {
-
-  const { data: randomArticle } = useReadContract({
-    address: web3humanContractAddress,
-    abi: web3humanContractAbi,
-    functionName: 'getRandomArticle',
-    args: [0],
-  });
-
-  function getRandomArticle() {
-    setIsRandomArticle(true);
-    setArticle(randomArticle?.url!);
-    setTitle(randomArticle?.title!);
-    setExplanation(randomArticle?.explanation!);
-    setPost(randomArticle?.explanation!);
-    setTagsString(randomArticle?.tags!);
-    setSummariesString(randomArticle?.summaries!);
-    setFaqsString(randomArticle?.faqs!);
-
-    randomArticle?.summaries!.split("@@").map(function (item: string) {
-      if (item.length > 0) {
-        summaries.push(item);
-      }
-    });
-    setSummaries(summaries);
-
-    randomArticle?.faqs!.split("@@").map(function (item: string) {
-      faqs.push({
-        question: item.split("@%")[0],
-        answer: item.split("@%")[1]
-      });
-      //faqsTemp += item.question + "@%" + item.answer + "@@";
-    });
-    setFaqs(faqs);
-
-    console.log("getRandomArticle Article downloaded:", randomArticle);
-    toast.success("Article downloaded!!!" + randomArticle);
-  }
-
   const { address } = useAccount();
-  // State variables with initial values
   const [isRandomArticle, setIsRandomArticle] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [article, setArticle] = useState("");
-  const [post, setPost] = useState("");
-  const [tweets, setTweets] = useState<string[]>([]);
-
-  // State for selected media
-  const [state, setState] = useState({
-    language: "spanish",
-  });
-
+  //const [post, setPost] = useState("");
   const [title, setTitle] = useState("");
   const [explanation, setExplanation] = useState("");
   const [faqs, setFaqs] = useState<Faq[]>([]);
@@ -86,34 +34,103 @@ export default function Chat() {
   const [faqsString, setFaqsString] = useState("");
   const [summariesString, setSummariesString] = useState("");
   const [tagsString, setTagsString] = useState("");
-
   const [titleEN, setTitleEN] = useState("");
   const [explanationEN, setExplanationEN] = useState("");
   const [faqsEN, setFaqsEN] = useState<Faq[]>([]);
   const [summariesEN, setSummariesEN] = useState<string[]>([]);
   const [tagsEN, setTagsEN] = useState<string[]>([]);
 
+  // State for selected media
+  const [state, setState] = useState({
+    language: "spanish",
+  });
+
+  const { data: randomArticle } = useReadContract({
+    address: web3humanContractAddress,
+    abi: web3humanContractAbi,
+    functionName: 'getRandomArticle',
+    args: [0],
+  });
+
+  interface Faq {
+    question: string,
+    answer: string,
+  }
+
   const languages = [
     { value: "spanish", name: "Español" },
     { value: "english", name: "English" },
   ];
 
+  const encodedWeb3humansData = encodeFunctionData({
+    abi: web3humanContractAbi,
+    functionName: 'makeDeposit',
+  });
+  const calls = [
+    {
+      to: web3humanContractAddress,
+      data: encodedWeb3humansData,
+      value: BigInt(70000000000000) // close to $0.20
+    },
+  ];
+  const contractsSaveArticle = [
+    {
+      address: web3humanContractAddress,
+      abi: web3humanContractAbi,
+      functionName: 'saveArticle',
+      args: [0, article, title, explanation, tagsString, summariesString, faqsString],
+    },
+  ] as unknown as ContractFunctionParameters[];
+
+  const contractsEN = [
+    {
+      address: web3humanContractAddress,
+      abi: web3humanContractAbi,
+      functionName: 'saveArticle',
+      args: [1],
+    },
+  ] as unknown as ContractFunctionParameters[];
+
   const handleError = (err: TransactionError) => {
-    console.error('Transaction error:', err);
+    //console.error('Transaction error:', err);
     toast.success("Transaction error: " + err);
   };
   const handlePaymentSuccess = (response: TransactionResponse) => {
-    console.log('handlePaymentSuccess Transaction successful', response);
-    toast.success("Transaction successful: " + response);
+    //console.log('handlePaymentSuccess Transaction successful', response);
     getExplanation();
   };
-  const handleSuccess = (response: TransactionResponse) => {
-    console.log('handleSuccess Transaction successful', response);
-    toast.success("Transaction successful: " + response);
+  const handleSaveSuccess = (response: TransactionResponse) => {
+    //console.log('handleSuccess Transaction successful', response);
+    toast.success("Article saved successfully!!!");
   };
+  function getRandomArticle() {
+    if (randomArticle) {
+      setIsRandomArticle(true);
+      setArticle(randomArticle?.url!);
+      setTitle(randomArticle?.title!);
+      setExplanation(randomArticle?.explanation!);
+      setTagsString(randomArticle?.tags!);
+      setSummariesString(randomArticle?.summaries!);
+      setFaqsString(randomArticle?.faqs!);
+
+      randomArticle?.summaries!.split("@@").map(function (item: string) {
+        if (item.length > 0) {
+          summaries.push(item);
+        }
+      });
+      setSummaries(summaries);
+
+      randomArticle?.faqs!.split("@@").map(function (item: string) {
+        faqs.push({
+          question: item.split("@%")[0],
+          answer: item.split("@%")[1]
+        });
+      });
+      setFaqs(faqs);
+    }
+  }
   const getExplanation = async () => {
     setIsRandomArticle(false);
-    console.log('getExplanation');
     setIsLoading(true);
     const responseScraping = await fetch(article.trim());
     const dataScraping = await responseScraping.text();
@@ -127,7 +144,6 @@ export default function Chat() {
       }),
     });
     const data = await response.json();
-    console.log("jsonResponse:", data);
     const cleanedJsonString = data.text.replace(/^```json\s*|```\s*$/g, "");
     const cleanedJsonObj = JSON.parse(cleanedJsonString);
 
@@ -177,62 +193,9 @@ export default function Chat() {
       })
     });
     setFaqsEN(faqsEN);
-
-    const responseFull = cleanedJsonObj.explanation.spanish;
-    setPost(responseFull);
     setIsLoading(false);
   }
 
-  const encodedWeb3humansData = encodeFunctionData({
-    abi: web3humanContractAbi,
-    functionName: 'makeDeposit',
-  });
-  const calls = [
-    {
-      to: web3humanContractAddress,
-      data: encodedWeb3humansData,
-      value: BigInt(70000000000000) // close to $0.20
-    },
-  ];
-  const contractsSaveArticle = [
-    {
-      address: web3humanContractAddress,
-      abi: web3humanContractAbi,
-      functionName: 'saveArticle',
-      args: [0, article, title, explanation, tagsString, summariesString, faqsString],
-    },
-  ] as unknown as ContractFunctionParameters[];
-
-  const contractsEN = [
-    {
-      address: web3humanContractAddress,
-      abi: web3humanContractAbi,
-      functionName: 'saveArticle',
-      args: [1],
-    },
-  ] as unknown as ContractFunctionParameters[];
-
-  const contractsGetArticle = [
-    {
-      address: web3humanContractAddress,
-      abi: web3humanContractAbi,
-      functionName: 'getRandomArticle',
-      args: [0],// 0 = articles in Spanish, 1 = articles in English
-    },
-  ] as unknown as ContractFunctionParameters[];
-
-  interface Faq {
-    question: string,
-    answer: string,
-  }
-
-  // Function to copy text to clipboard and display success message
-  function copyText(entryText: string) {
-    navigator.clipboard.writeText(entryText);
-    toast.success("Copied to clipboard!");
-  }
-
-  // Event handlers for article, state change, and file upload 
   const handleArticle = (event: { target: { value: any; }; }) => {
     const value = event.target.value;
     setArticle(value);
@@ -253,7 +216,6 @@ export default function Chat() {
   }
 
   // Main UI after input type selection
-  //https://eips.ethereum.org/EIPS/eip-4844
   return (
     <div className="w-full flex-col">
       <div className="flex flex-row items-center h-[50px] sticky top-0 bg-green-500">
@@ -280,7 +242,7 @@ export default function Chat() {
       <div className="px-4 py-6 md:py-8 lg:py-10">
         <div className="flex flex-col gap-4 max-w-3xl mx-auto">
           <div className="flex flex-col gap-2">
-            {!post && (
+            {!explanation && (
               <div className="w-full">
                 <h2 className="w-full text-2xl text-green-500 font-bold">Hello, Human!!!</h2>
 
@@ -294,7 +256,7 @@ export default function Chat() {
               </div>
             )}
             <form className="flex flex-row justify-center gap-2 md:gap-4">
-              {address ? article ? !post && (
+              {address ? article ? !explanation && (
                 <Transaction
                   capabilities={{
                     paymasterService: {
@@ -340,7 +302,7 @@ export default function Chat() {
                     withWalletAggregator={true}
                   />
                 )}
-              {post &&
+              {explanation &&
                 <>
                   {!isRandomArticle &&
                     <Transaction
@@ -352,23 +314,45 @@ export default function Chat() {
                       contracts={contractsSaveArticle}
                       chainId={BASE_SEPOLIA_CHAIN_ID}
                       onError={handleError}
-                      onSuccess={handleSuccess}
+                      onSuccess={handleSaveSuccess}
                       className="w-auto"
                     >
                       <TransactionButton className="w-auto m-2 hover:bg-green-800 bg-green-500 hover:text-white border border-green-500 py-2 px-4 rounded disabled:opacity-50" text="Save Explanation" />
-                      <TransactionStatus>
-                        <TransactionStatusLabel />
-                        <TransactionStatusAction />
-                      </TransactionStatus>
                     </Transaction>
                   }
-                  <ResetButton post={post} tweets={tweets} isLoading={isLoading} onButtonClicked={async () => {
-                    window.location.reload();
-                  }} />
+                  <button
+                    className="inline-flex items-center w-full md:w-auto order-3 m-2 font-bold hover:bg-green-500 text-green-500 hover:text-white border border-green-500 px-4 py-2 rounded disabled:opacity-50"
+                    hidden={explanation.length == 0}
+                    disabled={isLoading}
+                    onClick={async () => {
+                      window.location.reload();
+                    }}
+                  >
+                    <svg className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round">
+                      <path stroke="currentColor" d="M17.651 7.65a7.131 7.131 0 0 0-12.68 3.15M18.001 4v4h-4m-7.652 8.35a7.13 7.13 0 0 0 12.68-3.15M6 20v-4h4" />
+                    </svg>
+                    <span>Reset</span>
+                  </button>
                   <a
                     className="inline-flex items-center w-full md:w-auto order-3 m-2 font-bold hover:bg-green-500 text-green-500 hover:text-white border border-green-500 px-4 py-2 rounded disabled:opacity-50"
                     href={article.trim()} target="_blank"
                   >
+                    <svg
+                      className="w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                      <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+                    </svg>
                     <span>Open Link</span>
                   </a>
                 </>
@@ -377,9 +361,8 @@ export default function Chat() {
             </form>
           </div>
 
-          {/* Post generation and display section */}
-          {post && !isLoading && <div
-            className="w-full flex-col p-3 space-y-4"
+          {explanation && !isLoading && <div
+            className="w-full flex-col p-3 space-y-2"
           >
             {!isRandomArticle &&
               <div className="my-3 space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
@@ -407,7 +390,10 @@ export default function Chat() {
                 </div>
               </div>
             }
-            <h1 className="py-4 text-2xl text-green-500 font-semibold tracking-tight">{state.language == "spanish" ? title : titleEN}</h1>
+            <h1 className="text-center pt-3 text-2xl text-green-500 font-semibold tracking-tight">{state.language == "spanish" ? title : titleEN}</h1>
+            <div className="pb-3 text-white-100 text-center" hidden={!isRandomArticle}>
+              <span className="font-bold">Sponsored by:</span> {randomArticle?.sponsor!.slice(0, 5)}...{randomArticle?.sponsor!.slice(-5, -1)}
+            </div>
             <span className="text-sm text-white-300">
               {state.language == "spanish" ? tagsString :
                 tagsEN.map((tag, index) => (
@@ -416,7 +402,7 @@ export default function Chat() {
             </span>
             <div>{state.language == "spanish" ? explanation : explanationEN}</div>
             <h2 className="text-lg text-green-500 font-semibold tracking-tight">Summary</h2>
-            <ul className="list-disc m-4">
+            <ul className="list-disc m-6">
               {state.language == "spanish" ?
                 summaries.map((summary, index) => (
                   <li key={index}>{summary}</li>
@@ -427,7 +413,7 @@ export default function Chat() {
             </ul>
 
             <h2 className="text-lg text-green-500 font-semibold tracking-tight">FAQs</h2>
-            <ul className="space-y-2">
+            <ul className="space-y-2 m-4">
               {state.language == "spanish" ?
                 faqs.map((faq, index) => (
                   <div key={index}>
