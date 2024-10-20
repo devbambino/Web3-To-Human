@@ -11,18 +11,20 @@ Here's what it offers:
 - **Gas less transactions** Using Coinbase's paymaster capabilities the app allows gas less transactions for Coinbase wallet users. 
 
 - **Blockchain Storage** Articles are stored on the blockchain, making them accessible for free to future users. 
-<img src="res/feature3.png" width="612" height="300">
 
-- **Educational Features** Each article contains a title, tags, explanations, key points, and FAQs designed to break down complex topics, and help new users to break into the wonderful web3 world. 
-<img src="res/feature3.png" width="612" height="300">
+- **Educational Features** Each article contains a title, tags, explanations, key points, and FAQs designed to break down complex topics, and help new users to break into the wonderful web3 world.
 
 - 🧠 **Powered by Gemini Pro:** Leverages advanced AI capabilities for top-notch content quality.
-<img src="res/feature4.png" width="612" height="300">
 
 - 🛡️ **Committed to Responsible AI:** We've implemented safety measures to prevent our AI from generating harmful content. This includes filtering for categories like harassment, hate speech, sexually explicit material, and dangerous suggestions.
-<img src="res/feature5.png" width="612" height="300">
 
 - 💻 **Responsive Design:** Enjoy a user-friendly experience across all devices. 
+
+## Smart Contract
+The smart contract was deployed to Base Sepolia and this is its address:
+`0x37eDbe2D3f968E57C93aE41c2856CdDf711739CE`
+
+[Click here to see smart contract...](https://sepolia.basescan.org/address/0x37eDbe2D3f968E57C93aE41c2856CdDf711739CE)
 
 ## How to use it
 
