@@ -261,7 +261,7 @@ export default function Chat() {
                   onError={handleError}
                   onSuccess={handlePaymentSuccess}
                 >
-                  <TransactionButton className="m-auto w-auto hover:bg-green-800 bg-green-500 hover:text-white border border-green-500 py-2 px-4 rounded disabled:opacity-50" text="Pay $0.20 & Get Explanation" />
+                  <TransactionButton className="m-auto w-auto hover:bg-green-800 bg-green-500 hover:text-white border border-green-500 py-2 px-4 rounded disabled:opacity-50" text="Pay 0.00007 ETH to Get Explanation" />
                   <TransactionStatus>
                     <TransactionStatusLabel/>
                     <TransactionStatusAction/>

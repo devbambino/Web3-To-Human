@@ -6,15 +6,15 @@ With Web3 To Human, our goal is to bridge the knowledge gap around Web3 and bloc
 ## Features
 Here's what it offers:
 
-- 🪄 **Web3 to easy to understand language translation** The app transforms technical Web3 content into simplified articles in Spanish and english using AI. 
+- 🪄 **Web3 to easy to understand language translation:** The app transforms technical Web3 content into simplified articles in Spanish and english using AI. 
 
-- **Gas Less Transactions** Using Coinbase's paymaster capabilities the app allows gas less transactions for Coinbase wallet users. 
+- **Gas Less Transactions:** Using Coinbase's paymaster capabilities the app allows gas less transactions for Coinbase wallet users. 
 
-- **Charging for Using AI** In order to avoid bots to abuse the app we decided to charge 0.00007 ETH, equivalent to less than 20 cents. We are planning to reduce this amount in the future when the app goes to production and Mainnet. 
+- **Charging for Using AI:** In order to avoid bots to abuse the app we decided to charge 0.00007 ETH, equivalent to less than 20 cents. We are planning to reduce this amount in the future when the app goes to production and Mainnet. 
 
-- **Blockchain Storage** Articles are stored on the blockchain, making them accessible for free to future users. 
+- **Blockchain Storage:** Articles are stored on the blockchain, making them accessible for free to future users. 
 
-- **Educational Features** Each article contains a title, tags, explanations, key points, and FAQs designed to break down complex topics, and help new users to break into the wonderful web3 world.
+- **Educational Features:** Each article contains a title, tags, explanations, key points, and FAQs designed to break down complex topics, and help new users to break into the wonderful web3 world.
 
 - 🧠 **Powered by Gemini Pro:** Leverages advanced AI capabilities for top-notch content quality.
 
